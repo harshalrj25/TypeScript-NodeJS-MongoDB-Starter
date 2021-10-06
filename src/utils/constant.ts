@@ -1,0 +1,1 @@
+export const ROLE_LIST = ["child", "parent", "teacher","admin"];
