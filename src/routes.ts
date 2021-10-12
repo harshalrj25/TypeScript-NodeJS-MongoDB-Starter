@@ -10,20 +10,9 @@ const addRoute = (
   isAuthenticated: boolean
 ) => {
   isAuthenticated
-    ? app.use(url, passport.authenticate("local", { session: false }), routes)
+    ? app.use(url, passport.authenticate("bearer", { session: false }), routes)
     : app.use(url, routes);
 };
-
-export default function permit(...allowed: any[]) {
-  const isAllowed = (role: string) => allowed.indexOf(role) > -1;
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (req.user) {
-      next();
-    } else {
-      res.status(403).json({ message: "Forbidden" });
-    }
-  };
-}
 
 const register = (app: Express) => {
   addRoute(app, "/user", user.routes, true);

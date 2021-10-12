@@ -1,5 +1,6 @@
 import Role from "./models/role.model";
 import { ROLE_LIST } from "./utils/constant";
+import logger from "./utils/logger";
 // create roles collection to mongodb
 export const createRolesInDB = () => {
   Role.estimatedDocumentCount((err: Error, count: number) => {
@@ -9,9 +10,9 @@ export const createRolesInDB = () => {
           name: role,
         }).save((err) => {
           if (err) {
-            console.log("error", err);
+            logger.error("error", err);
           }
-          console.log(`added ${role} to roles collection`);
+          logger.debug(`added ${role} to roles collection`);
         });
       });
     }

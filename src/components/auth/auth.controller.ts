@@ -4,6 +4,7 @@ import { info } from "../../models/info.model";
 import passport from "passport";
 import * as signUpService from "./services/signup.service";
 import * as signInService from "./services/signin.service";
+import logger from "../../utils/logger";
 
 export const signIn = async (req: Request, res: Response) => {
   try {
@@ -52,7 +53,7 @@ export const signUp = async (req: Request, res: Response) => {
     }
     return res.status(200).send(response);
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 

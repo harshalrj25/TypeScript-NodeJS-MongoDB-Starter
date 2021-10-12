@@ -15,6 +15,7 @@ import {
   ORIGIN,
   SESSION_SECRET,
 } from "./utils/secrets";
+import logger from "./utils/logger";
 
 const app = express();
 
@@ -22,11 +23,11 @@ if (MONGODB_URI) {
   mongoose
     .connect(MONGODB_URI)
     .then(() => {
-      console.log("Successfully connected to MongoDB.");
+      logger.debug("Successfully connected to MongoDB.");
       createRolesInDB();
     })
     .catch((err: mongoose.Error) => {
-      console.error("Connection error", err);
+      logger.error("Connection error", err);
       process.exit();
     });
 }
@@ -52,10 +53,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use((req, res, next) => {
-  console.log("app.ts =>", req.session.id);
-  next();
-});
 routes.registerHealthCheckRoute(app);
 routes.registerRoutes(app);
 export default app;
