@@ -7,7 +7,7 @@ export const createRolesInDB = () => {
       ROLE_LIST.forEach((role) => {
         new Role({
           name: role,
-        }).save((err: Error) => {
+        }).save((err) => {
           if (err) {
             console.log("error", err);
           }

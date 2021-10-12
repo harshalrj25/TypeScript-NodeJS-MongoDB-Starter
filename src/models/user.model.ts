@@ -1,27 +1,51 @@
 import mongoose from "mongoose";
-import { RoleModel } from "./role.model";
+import bcrypt from "bcrypt";
 
-export type UserModel = {
-  username: string;
+export type UserDocument = mongoose.Document & {
   email: string;
   password: string;
-  role: RoleModel;
+  role: string;
+  sessionId: string;
+  comparePassword: Function;
 };
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-      },
-    ],
+    role: { type: String, required: true },
+    sessionId: { type: String, required: false },
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
-export default User;
+userSchema.pre("save", function save(next) {
+  const user = this;
+  if (!user.isModified("password")) {
+    return next();
+  }
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) {
+      return next(err);
+    }
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) {
+        return next(err);
+      }
+      user.password = hash;
+      next();
+    });
+  });
+});
+
+async function comparePassword(password: string, passwordHash: string) {
+  const match = await bcrypt.compare(password, passwordHash);
+  if (match) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+userSchema.methods.comparePassword = comparePassword;
+export const User = mongoose.model<UserDocument>("User", userSchema);

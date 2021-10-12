@@ -17,6 +17,7 @@ export const MONGODB_URI = process.env["MONGODB_URI"];
 export const PORT_NUMBER = process.env["PORT"];
 export const X_API_KEY = process.env["X_API_KEY"];
 export const ORIGIN = process.env["ORIGIN"];
+export const SESSION_SECRET = process.env["SESSION_SECRET"];
 if (!MONGODB_URI) {
   logger.error(
     "No mongo connection string. Set MONGODB_URI environment variable."

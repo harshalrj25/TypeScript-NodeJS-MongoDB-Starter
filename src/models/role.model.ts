@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-
-export type RoleModel = {
+export type RoleDocument = mongoose.Document & {
   name: string;
 };
 
@@ -11,5 +10,5 @@ const roleSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Role = mongoose.model("Role", roleSchema);
+const Role = mongoose.model<RoleDocument>("Role", roleSchema);
 export default Role;
